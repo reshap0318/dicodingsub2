@@ -41,7 +41,7 @@ class MainActivity : AppCompatActivity() {
 
 
         showLoading(true)
-        userViewModel.setData("a")
+        userViewModel.setDataPencarian("a")
 
         userViewModel.getData().observe(this, Observer { user ->
             if (user != null) {
@@ -60,7 +60,7 @@ class MainActivity : AppCompatActivity() {
             searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
                 override fun onQueryTextSubmit(query: String): Boolean {
                     showLoading(true)
-                    userViewModel.setData(query)
+                    userViewModel.setDataPencarian(query)
                     return true
                 }
 
@@ -68,11 +68,11 @@ class MainActivity : AppCompatActivity() {
                     if(newText!!.isNotEmpty()){
                         val search = newText.toLowerCase(Locale.getDefault())
                         showLoading(true)
-                        userViewModel.setData(search)
+                        userViewModel.setDataPencarian(search)
                     }
                     else{
                         showLoading(true)
-                        userViewModel.setData("a")
+                        userViewModel.setDataPencarian("a")
                     }
                     return false
                 }
