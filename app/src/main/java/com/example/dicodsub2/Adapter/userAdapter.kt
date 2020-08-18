@@ -11,19 +11,33 @@ import kotlinx.android.synthetic.main.row_user_main.view.*
 
 class userAdapter(private val onItemClickListener : onItemClick) : RecyclerView.Adapter<userAdapter.viewHolder>(){
 
-    var datas = mutableListOf<User>()
-        set(value){
-            field = value
-        }
+    var datas = ArrayList<User>()
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): viewHolder = viewHolder(LayoutInflater.from(parent.context)
-        .inflate(R.layout.row_user_main, parent, false))
+    fun setData(items: ArrayList<User>) {
+        datas.clear()
+        datas.addAll(items)
+        notifyDataSetChanged()
+    }
+
+    fun addItem(item: User) {
+        datas.add(item)
+        notifyDataSetChanged()
+    }
+
+    fun clearData() {
+        datas.clear()
+    }
+
+    override fun onCreateViewHolder(viewGroup: ViewGroup, position: Int): viewHolder {
+        val mView = LayoutInflater.from(viewGroup.context).inflate(R.layout.row_user_main, viewGroup, false)
+        return viewHolder(mView)
+    }
+
+    override fun onBindViewHolder(viewHolder: viewHolder, position: Int) {
+        viewHolder.onBind(datas[position])
+    }
 
     override fun getItemCount(): Int = datas.size
-
-    override fun onBindViewHolder(holder: viewHolder, position: Int) {
-        holder.onBind(datas[position])
-    }
 
     inner class viewHolder(private val view : View) : RecyclerView.ViewHolder(view){
         fun onBind (user : User){
