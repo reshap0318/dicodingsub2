@@ -6,6 +6,7 @@ import com.bumptech.glide.Glide
 import com.example.dicodsub2.Model.User
 import com.example.dicodsub2.R
 import com.example.dicodsub2.SectionsPagerAdapter
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.activity_detail.*
 import kotlinx.android.synthetic.main.row_user_main.view.*
 
@@ -36,5 +37,11 @@ class DetailActivity : AppCompatActivity() {
         view_pager.adapter = sectionsPagerAdapter
         tabs.setupWithViewPager(view_pager)
         supportActionBar?.elevation = 0f
+
+        detail_like_fab.setOnClickListener{ view->
+            Snackbar.make(view, "Here's a Snackbar", Snackbar.LENGTH_LONG)
+                .setAction("Action", null)
+                .show()
+        }
     }
 }
