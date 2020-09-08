@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.os.HandlerThread
+import android.util.Log
 import android.view.View
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -26,9 +27,9 @@ class MainActivity : AppCompatActivity() {
 
         val layoutManager = LinearLayoutManager(this)
         userAdapter = userFavoritAdapter{user ->
-//            val intent = Intent(this, FavoritDetailActivity::class.java)
-//            intent.putExtra("data",user)
-//            startActivity(intent)
+            val intent = Intent(this, DetailActivity::class.java)
+            intent.putExtra("data",user)
+            startActivity(intent)
         }
         userAdapter.notifyDataSetChanged()
         rv_list_user_favorit.layoutManager = layoutManager
@@ -46,7 +47,8 @@ class MainActivity : AppCompatActivity() {
                 loadData()
             }
         }
-//        contentResolver.registerContentObserver(CONTENT_URI_USER, true, myObserver)
+        Log.d("URI_CONTENT_URI_USER",CONTENT_URI_USER.toString())
+        contentResolver.registerContentObserver(CONTENT_URI_USER, true, myObserver)
 
     }
 

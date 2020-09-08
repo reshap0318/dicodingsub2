@@ -6,8 +6,13 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.VIBRATE" />
-    <permission android:name="com.example.dicodsub2.READ_DATABASE" android:protectionLevel="normal" />
-    <permission android:name="com.example.dicodsub2.WRITE_DATABASE" android:protectionLevel="normal" />
+
+    <permission
+            android:name="com.example.dicodsub2.READ_DATABASE"
+            android:protectionLevel="normal" />
+    <permission
+            android:name="com.example.dicodsub2.WRITE_DATABASE"
+            android:protectionLevel="normal" />
 
     <application
             android:name=".receiver.MyApplication"
@@ -24,7 +29,7 @@
                 android:enabled="true"
                 android:exported="true"
                 android:readPermission="com.example.dicodsub2.READ_DATABASE"
-                android:writePermission="com.example.dicodsub2.WRITE_DATABASE"/>
+                android:writePermission="com.example.dicodsub2.WRITE_DATABASE" />
 
         <activity android:name=".Activity.FavoritDetailActivity" />
         <activity android:name=".Activity.FavoritActivity" />

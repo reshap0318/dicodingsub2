@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.os.HandlerThread
+import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.recyclerview.widget.DividerItemDecoration
@@ -52,6 +53,7 @@ class FavoritActivity : AppCompatActivity() {
                 loadData()
             }
         }
+        Log.d("URI_CONTENT_URI_USER",CONTENT_URI_USER.toString())
         contentResolver.registerContentObserver(CONTENT_URI_USER, true, myObserver)
 
     }
