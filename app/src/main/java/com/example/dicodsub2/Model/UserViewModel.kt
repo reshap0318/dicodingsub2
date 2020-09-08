@@ -17,6 +17,8 @@ import java.util.*
 class UserViewModel : ViewModel() {
 
     private val listUsers = MutableLiveData<ArrayList<User>>()
+    private val listFollowers = MutableLiveData<ArrayList<User>>()
+    private val listFollowings = MutableLiveData<ArrayList<User>>()
 
     fun setDataPencarian(search: String) {
         val displayList = ArrayList<User>()
@@ -127,7 +129,7 @@ class UserViewModel : ViewModel() {
                                                 follower,
                                                 following
                                             ))
-                                            listUsers.postValue(displayList)
+                                            listFollowers.postValue(displayList)
                                         } catch (e: Exception) {
                                             Log.d("Exception", e.message.toString())
                                             e.printStackTrace()
@@ -196,7 +198,7 @@ class UserViewModel : ViewModel() {
                                                 follower,
                                                 following
                                             ))
-                                            listUsers.postValue(displayList)
+                                            listFollowings.postValue(displayList)
                                         } catch (e: Exception) {
                                             Log.d("Exception", e.message.toString())
                                             e.printStackTrace()
@@ -226,7 +228,15 @@ class UserViewModel : ViewModel() {
         })
     }
 
-    fun getData(): LiveData<ArrayList<User>> {
+    fun getDataUser(): LiveData<ArrayList<User>> {
         return listUsers
+    }
+
+    fun getDataFollower(): LiveData<ArrayList<User>> {
+        return listFollowers
+    }
+
+    fun getDataFollowing(): LiveData<ArrayList<User>> {
+        return listFollowings
     }
 }

@@ -41,9 +41,9 @@ class MainActivity : AppCompatActivity() {
 
 
         showLoading(true)
-        userViewModel.setDataPencarian("a")
+        userViewModel.setDataPencarian("reshap0318")
 
-        userViewModel.getData().observe(this, Observer { user ->
+        userViewModel.getDataUser().observe(this, Observer { user ->
             if (user != null) {
                 userAdapter.setData(user)
                 showLoading(false)
@@ -72,7 +72,7 @@ class MainActivity : AppCompatActivity() {
                     }
                     else{
                         showLoading(true)
-                        userViewModel.setDataPencarian("a")
+                        userViewModel.setDataPencarian("reshap0318")
                     }
                     return false
                 }
@@ -84,7 +84,19 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return super.onOptionsItemSelected(item)
+        when (item.itemId) {
+            R.id.setting -> {
+                val intent = Intent(this, SettingActivity::class.java)
+                startActivity(intent)
+                return true
+            }
+            R.id.favorit -> {
+                val intent = Intent(this, FavoritActivity::class.java)
+                startActivity(intent)
+                return true
+            }
+            else -> return true
+        }
     }
 
     private fun showLoading(state: Boolean) {

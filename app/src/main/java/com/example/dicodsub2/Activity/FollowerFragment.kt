@@ -55,7 +55,7 @@ class FollowerFragment : Fragment() {
             if(username != null){
                 showLoading(true)
                 userViewModel.setDataFollower(username)
-                userViewModel.getData().observe(this, Observer { user ->
+                userViewModel.getDataFollower().observe(this, Observer { user ->
                     if (user != null) {
                         userAdapter.setData(user)
                         showLoading(false)
