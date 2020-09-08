@@ -1,10 +1,14 @@
 package com.example.dicodsub2.db
 
+import android.net.Uri
 import android.provider.BaseColumns
 
-internal class DatabaseContract {
+object DatabaseContract {
 
-    internal class UserColumn : BaseColumns {
+    const val AUTHORITY = "com.reshap0318.dicodsub3"
+    const val SCHEME = "content"
+
+    class UserColumn : BaseColumns {
         companion object {
             const val TABLE_NAME_USER = "user"
             const val TABLE_NAME_FOLLOWER = "follower"
@@ -18,6 +22,21 @@ internal class DatabaseContract {
             const val FOLLOWING = "following"
             const val FOLLOWER_USERNAME = "follower_username"
             const val FOLLOWING_USERNAME = "following_username"
+
+            val CONTENT_URI_USER: Uri = Uri.Builder().scheme(SCHEME)
+                .authority(AUTHORITY)
+                .appendPath(TABLE_NAME_USER)
+                .build()
+
+            val CONTENT_URI_FOLLOWER: Uri = Uri.Builder().scheme(SCHEME)
+                .authority(AUTHORITY)
+                .appendPath(TABLE_NAME_FOLLOWER)
+                .build()
+
+            val CONTENT_URI_FOLLOWING: Uri = Uri.Builder().scheme(SCHEME)
+                .authority(AUTHORITY)
+                .appendPath(TABLE_NAME_FOLLOWING)
+                .build()
         }
     }
 

@@ -1,5 +1,6 @@
 package com.example.dicodsub2.Activity
 
+import android.net.Uri
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -10,6 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.dicodsub2.Adapter.userFavoritAdapter
 import com.example.dicodsub2.Helper.MappingHelper
 import com.example.dicodsub2.R
+import com.example.dicodsub2.db.DatabaseContract
 import com.example.dicodsub2.db.FollowerHelper
 import com.example.dicodsub2.db.FollowingHelper
 import kotlinx.android.synthetic.main.fragment_favorit_following.*
@@ -23,7 +25,7 @@ import kotlinx.coroutines.launch
 class favoritFollowingFragment : Fragment() {
 
     private lateinit var userAdapter: userFavoritAdapter
-    private lateinit var followingHelper: FollowingHelper
+    private lateinit var uriFollowingWithUsername: Uri
 
     companion object {
         var EXTRA_USERAME = "USERNAME"
@@ -43,9 +45,7 @@ class favoritFollowingFragment : Fragment() {
 
         if (arguments != null) {
             val username = arguments?.getString(FollowerFragment.EXTRA_USERAME)
-
-            followingHelper = activity?.let { FollowingHelper.getInstance(it) }!!
-            followingHelper.open()
+            uriFollowingWithUsername= Uri.parse(DatabaseContract.UserColumn.CONTENT_URI_FOLLOWING.toString() + "/" + username)
 
             val layoutManager = LinearLayoutManager(activity)
             userAdapter = userFavoritAdapter{user ->
@@ -58,7 +58,7 @@ class favoritFollowingFragment : Fragment() {
             showLoading(true)
             GlobalScope.launch(Dispatchers.Main) {
                 val deferredNotes = async(Dispatchers.IO) {
-                    val cursor = username?.let { followingHelper.queryByFollowingUsername(it) }
+                    val cursor = activity?.contentResolver?.query(uriFollowingWithUsername, null, null, null, null)
                     MappingHelper.mapCursorToArrayList(cursor)
                 }
                 val followers = deferredNotes.await()

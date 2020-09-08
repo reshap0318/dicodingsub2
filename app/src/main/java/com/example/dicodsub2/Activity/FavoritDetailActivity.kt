@@ -1,6 +1,7 @@
 package com.example.dicodsub2.Activity
 
 import android.content.Intent
+import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
@@ -9,6 +10,7 @@ import com.example.dicodsub2.Helper.MappingHelper
 import com.example.dicodsub2.Model.UserLite
 import com.example.dicodsub2.R
 import com.example.dicodsub2.SectionPagerAdapterFavorit
+import com.example.dicodsub2.db.DatabaseContract
 import com.example.dicodsub2.db.FollowerHelper
 import com.example.dicodsub2.db.FollowingHelper
 import com.example.dicodsub2.db.UserHelper
@@ -20,10 +22,10 @@ import kotlinx.coroutines.launch
 
 class FavoritDetailActivity : AppCompatActivity() {
 
-    private lateinit var userHelper: UserHelper
-    private lateinit var followerHelper: FollowerHelper
-    private lateinit var followingHelper: FollowingHelper
     private var isInDatabase = false
+    private lateinit var uriUserWithUsername: Uri
+    private lateinit var uriFollowerWithUsername: Uri
+    private lateinit var uriFollowingWithUsername: Uri
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,22 +33,20 @@ class FavoritDetailActivity : AppCompatActivity() {
 
         val data = intent.getParcelableExtra<UserLite>("data")
 
-        userHelper = UserHelper.getInstance(applicationContext)
-        userHelper.open()
-        followerHelper = FollowerHelper.getInstance(applicationContext)
-        followerHelper.open()
-        followingHelper = FollowingHelper.getInstance(applicationContext)
-        followingHelper.open()
-
         data.username?.let {
-            checkDataUser(it)
+            uriUserWithUsername = Uri.parse(DatabaseContract.UserColumn.CONTENT_URI_USER.toString() + "/" + it)
+            uriFollowerWithUsername = Uri.parse(DatabaseContract.UserColumn.CONTENT_URI_FOLLOWER.toString() + "/" + it)
+            uriFollowingWithUsername= Uri.parse(DatabaseContract.UserColumn.CONTENT_URI_FOLLOWING.toString() + "/" + it)
         }
 
+        checkDataUser()
         initData(data)
 
         detail_like_fab_favorit.setOnClickListener{ view->
             if(isInDatabase){
-                data.username?.let { deleteFavorit(it) }
+                deleteFavorit()
+            }else{
+                Toast.makeText(this, "Pemalas.Com :v", Toast.LENGTH_SHORT).show()
             }
         }
 
@@ -74,26 +74,21 @@ class FavoritDetailActivity : AppCompatActivity() {
         supportActionBar?.elevation = 0f
     }
 
-    fun deleteFavorit(username:String){
-        followerHelper.deleteByFollowerUsername(username)
-        followingHelper.deleteByFollowingUsername(username)
-        val result = userHelper.deleteByUsername(username).toLong()
-        if(result > 0){
-            changeFAB(false)
-            val intent = Intent(this, FavoritActivity::class.java)
-            startActivity(intent)
-            Toast.makeText(this, "Berhasil Menghapus dari Favorit", Toast.LENGTH_SHORT).show()
-        }else{
-            Toast.makeText(this, "Gagal Menghapus dari Favorit", Toast.LENGTH_SHORT).show()
-        }
-
+    fun deleteFavorit(){
+        contentResolver.delete(uriFollowerWithUsername, null, null)
+        contentResolver.delete(uriFollowingWithUsername, null, null)
+        contentResolver.delete(uriUserWithUsername, null, null)
+        changeFAB(false)
+        val intent = Intent(this, FavoritActivity::class.java)
+        startActivity(intent)
+        Toast.makeText(this, "Berhasil Menghapus dari Favorit", Toast.LENGTH_SHORT).show()
     }
 
-    fun checkDataUser(username: String){
+    fun checkDataUser(){
         val _this = this
         GlobalScope.launch(Dispatchers.Main) {
             val deferredNotes = async(Dispatchers.IO) {
-                val cursor = userHelper.queryByUsername(username)
+                val cursor = contentResolver?.query(uriUserWithUsername, null, null, null, null)
                 MappingHelper.mapCursorToArrayList(cursor)
             }
             val notes = deferredNotes.await()
@@ -111,12 +106,5 @@ class FavoritDetailActivity : AppCompatActivity() {
             isInDatabase = false
             detail_like_fab_favorit.setImageResource(R.drawable.unlike)
         }
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        userHelper.close()
-        followerHelper.close()
-        followingHelper.close()
     }
 }

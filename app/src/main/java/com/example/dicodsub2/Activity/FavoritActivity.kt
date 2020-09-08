@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.dicodsub2.Adapter.userFavoritAdapter
 import com.example.dicodsub2.Helper.MappingHelper
 import com.example.dicodsub2.R
+import com.example.dicodsub2.db.DatabaseContract
 import com.example.dicodsub2.db.UserHelper
 import kotlinx.android.synthetic.main.activity_favorit.*
 import kotlinx.coroutines.Dispatchers
@@ -19,14 +20,10 @@ import kotlinx.coroutines.launch
 
 class FavoritActivity : AppCompatActivity() {
     private lateinit var userAdapter: userFavoritAdapter
-    private lateinit var userHelper: UserHelper
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_favorit)
-
-        userHelper = UserHelper.getInstance(applicationContext)
-        userHelper.open()
 
         val layoutManager = LinearLayoutManager(this)
         userAdapter = userFavoritAdapter{user ->
@@ -55,7 +52,7 @@ class FavoritActivity : AppCompatActivity() {
     fun loadData(){
         GlobalScope.launch(Dispatchers.Main) {
             val deferredNotes = async(Dispatchers.IO) {
-                val cursor = userHelper.queryAll()
+                val cursor = contentResolver?.query(DatabaseContract.UserColumn.CONTENT_URI_USER, null, null, null, null)
                 MappingHelper.mapCursorToArrayList(cursor)
             }
             val users = deferredNotes.await()
@@ -66,10 +63,5 @@ class FavoritActivity : AppCompatActivity() {
             }
         }
         showLoading(false)
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        userHelper.close()
     }
 }

@@ -7,7 +7,7 @@ import android.database.sqlite.SQLiteOpenHelper
 internal class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION) {
     companion object {
         private const val DATABASE_NAME = "dbLocal"
-        private const val DATABASE_VERSION = 3
+        private const val DATABASE_VERSION = 1
         private val SQL_CREATE_TABLE_USER = "CREATE TABLE ${DatabaseContract.UserColumn.TABLE_NAME_USER}" +
                 " (${DatabaseContract.UserColumn._ID} INTEGER PRIMARY KEY AUTOINCREMENT," +
                 " ${DatabaseContract.UserColumn.USERNAME} TEXT NOT NULL," +

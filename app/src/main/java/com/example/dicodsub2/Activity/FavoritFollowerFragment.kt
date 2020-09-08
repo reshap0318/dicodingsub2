@@ -1,6 +1,7 @@
 package com.example.dicodsub2.Activity
 
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -11,6 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.dicodsub2.Adapter.userFavoritAdapter
 import com.example.dicodsub2.Helper.MappingHelper
 import com.example.dicodsub2.R
+import com.example.dicodsub2.db.DatabaseContract
 import com.example.dicodsub2.db.FollowerHelper
 import kotlinx.android.synthetic.main.fragment_favorit_follower.*
 import kotlinx.coroutines.Dispatchers
@@ -21,7 +23,7 @@ import kotlinx.coroutines.launch
 class FavoritFollowerFragment : Fragment() {
 
     private lateinit var userAdapter: userFavoritAdapter
-    private lateinit var followerHelper: FollowerHelper
+    private lateinit var uriFollowerWithUsername: Uri
 
     companion object {
         var EXTRA_USERAME = "USERNAME"
@@ -40,9 +42,7 @@ class FavoritFollowerFragment : Fragment() {
 
         if (arguments != null) {
             val username = arguments?.getString(FollowerFragment.EXTRA_USERAME)
-
-            followerHelper = activity?.let { FollowerHelper.getInstance(it) }!!
-            followerHelper.open()
+            uriFollowerWithUsername = Uri.parse(DatabaseContract.UserColumn.CONTENT_URI_FOLLOWER.toString() + "/" + username)
 
             val layoutManager = LinearLayoutManager(activity)
             userAdapter = userFavoritAdapter{user ->
@@ -55,7 +55,7 @@ class FavoritFollowerFragment : Fragment() {
             showLoading(true)
             GlobalScope.launch(Dispatchers.Main) {
                 val deferredNotes = async(Dispatchers.IO) {
-                    val cursor = username?.let { followerHelper.queryByFollowerUsername(it) }
+                    val cursor = activity?.contentResolver?.query(uriFollowerWithUsername, null, null, null, null)
                     MappingHelper.mapCursorToArrayList(cursor)
                 }
                 val followers = deferredNotes.await()
