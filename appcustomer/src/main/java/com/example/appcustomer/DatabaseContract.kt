@@ -1,4 +1,4 @@
-package com.example.dicodsub2.db
+package com.example.appcustomer
 
 import android.net.Uri
 import android.provider.BaseColumns

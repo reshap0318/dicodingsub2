@@ -9,18 +9,18 @@ import retrofit2.http.Query
 
 interface userApi {
     @GET("search/users")
-    @Headers("Authorization: token fa03fb53b455e3d68ff193f50f6239c01111f47e")
+    @Headers("Authorization: token c1e861afa2357303c39173694a1d387f01fbd0b6")
     fun search(@Query("q") id: String): Call<ResponseBody>
 
     @GET("users/{username}")
-    @Headers("Authorization: token fa03fb53b455e3d68ff193f50f6239c01111f47e")
+    @Headers("Authorization: token c1e861afa2357303c39173694a1d387f01fbd0b6")
     fun detailUser(@Path("username") username: String): Call<ResponseBody>
 
     @GET("/users/{username}/followers")
-    @Headers("Authorization: token fa03fb53b455e3d68ff193f50f6239c01111f47e")
+    @Headers("Authorization: token c1e861afa2357303c39173694a1d387f01fbd0b6")
     fun followerUser(@Path("username") username: String): Call<ResponseBody>
 
     @GET("/users/{username}/following")
-    @Headers("Authorization: token fa03fb53b455e3d68ff193f50f6239c01111f47e")
+    @Headers("Authorization: token c1e861afa2357303c39173694a1d387f01fbd0b6")
     fun followingUser(@Path("username") username: String): Call<ResponseBody>
 }
